@@ -10,6 +10,8 @@ export interface CommandHandlers {
   onNewMemo: () => void;
   onDeleteTab: () => void;
   onQuit: () => void;
+  onNextTab: () => void;
+  onPrevTab: () => void;
 }
 
 /**
@@ -68,6 +70,20 @@ export async function setupKeyboardShortcuts(
     if ((e.metaKey || e.ctrlKey) && e.key === 'w') {
       e.preventDefault();
       handlers.onDeleteTab();
+      return;
+    }
+
+    // Cmd+Shift+L - Next Tab
+    if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === 'l') {
+      e.preventDefault();
+      handlers.onNextTab();
+      return;
+    }
+
+    // Cmd+Shift+H - Previous Tab
+    if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === 'h') {
+      e.preventDefault();
+      handlers.onPrevTab();
       return;
     }
 

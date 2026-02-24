@@ -28,6 +28,8 @@ interface Store extends AppStateShape {
   setOpacity: (opacity: number) => void;
   setShortcuts: (shortcuts: ShortcutSettings) => void;
   setCopyStatus: (status: 'idle' | 'copied') => void;
+  activateNextNote: () => void;
+  activatePrevNote: () => void;
 }
 
 /**
@@ -81,6 +83,8 @@ export const useStore = create<Store>((set, get) => ({
       copy: { ctrlKey: true, shiftKey: false, altKey: false, key: 'c' },
       newMemo: { ctrlKey: true, shiftKey: false, altKey: false, key: 'n' },
       deleteMemo: { ctrlKey: true, shiftKey: false, altKey: false, key: 'w' },
+      nextTab: { ctrlKey: true, shiftKey: true, altKey: false, key: 'l' },
+      prevTab: { ctrlKey: true, shiftKey: true, altKey: false, key: 'h' },
     },
   },
   copyStatus: 'idle',
@@ -273,6 +277,24 @@ export const useStore = create<Store>((set, get) => ({
 
       return newState;
     });
+  },
+
+  // Action: Activate next note (wrap around)
+  activateNextNote: () => {
+    const { notes, activeId } = get();
+    if (notes.length <= 1) return;
+    const currentIndex = notes.findIndex((n) => n.id === activeId);
+    const nextIndex = (currentIndex + 1) % notes.length;
+    set({ activeId: notes[nextIndex].id });
+  },
+
+  // Action: Activate previous note (wrap around)
+  activatePrevNote: () => {
+    const { notes, activeId } = get();
+    if (notes.length <= 1) return;
+    const currentIndex = notes.findIndex((n) => n.id === activeId);
+    const prevIndex = (currentIndex - 1 + notes.length) % notes.length;
+    set({ activeId: notes[prevIndex].id });
   },
 
   // Action: Set copy status (transient state)
