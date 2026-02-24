@@ -8,7 +8,7 @@ import { invoke } from '@tauri-apps/api/core';
  * Automatically syncs with active note, handles focus, and saves on change.
  */
 export function Editor() {
-  const { activeNote, upsertNoteContent, setCopyStatus, createNewNote, activeId, deleteNote } = useStore();
+  const { activeNote, upsertNoteContent, setCopyStatus, createNewNote, activeId, deleteNote, activateNextNote, activatePrevNote } = useStore();
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   const note = activeNote();
@@ -71,6 +71,8 @@ export function Editor() {
         onNewMemo: handleNewMemo,
         onDeleteTab: handleDeleteTab,
         onQuit: handleQuit,
+        onNextTab: activateNextNote,
+        onPrevTab: activatePrevNote,
       });
 
       return () => {
@@ -83,7 +85,7 @@ export function Editor() {
     return () => {
       cleanupPromise.then((cleanup) => cleanup?.());
     };
-  }, [content, setCopyStatus, createNewNote, activeId, deleteNote, handleQuit]);
+  }, [content, setCopyStatus, createNewNote, activeId, deleteNote, handleQuit, activateNextNote, activatePrevNote]);
 
   /**
    * Handle text change - save to store immediately

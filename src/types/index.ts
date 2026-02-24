@@ -68,6 +68,14 @@ export type ShortcutSettings = {
    * Delete current memo shortcut (default: Cmd+W)
    */
   deleteMemo: ShortcutKey;
+  /**
+   * Switch to next tab (default: Cmd+Shift+L)
+   */
+  nextTab: ShortcutKey;
+  /**
+   * Switch to previous tab (default: Cmd+Shift+H)
+   */
+  prevTab: ShortcutKey;
 };
 
 /**

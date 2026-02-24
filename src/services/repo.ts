@@ -47,6 +47,8 @@ const DEFAULT_SHORTCUTS = {
   copy: { ctrlKey: true, shiftKey: false, altKey: false, key: 'c' },
   newMemo: { ctrlKey: true, shiftKey: false, altKey: false, key: 'n' },
   deleteMemo: { ctrlKey: true, shiftKey: false, altKey: false, key: 'w' },
+  nextTab: { ctrlKey: true, shiftKey: true, altKey: false, key: 'l' },
+  prevTab: { ctrlKey: true, shiftKey: true, altKey: false, key: 'h' },
 };
 
 /**
@@ -89,6 +91,8 @@ function validateSettings(settings: unknown): Settings {
       copy: validateShortcutKey(sc.copy),
       newMemo: validateShortcutKey(sc.newMemo),
       deleteMemo: validateShortcutKey(sc.deleteMemo),
+      nextTab: validateShortcutKey(sc.nextTab),
+      prevTab: validateShortcutKey(sc.prevTab),
     };
   }
 
