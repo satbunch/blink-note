@@ -60,6 +60,53 @@ rm -rf node_modules src-tauri/target
 npm install
 ```
 
+## CI/CD
+
+### 自動リリース
+
+**トリガー:** `main` ブランチへのマージ
+
+**処理フロー:**
+1. `src-tauri/tauri.conf.json` からバージョン取得（例: `0.2.0`）
+2. タグが存在しない場合のみビルド実行
+3. Universal Binary（Apple Silicon + Intel）をビルド
+4. Git タグ自動作成（例: `v0.2.0`）
+5. GitHub Releases に自動公開（`.dmg` と `.app.tar.gz`）
+
+**リリース手順:**
+```bash
+# 1. バージョン更新
+# src-tauri/tauri.conf.json の version を更新（例: 0.2.0 → 0.3.0）
+
+# 2. コミット & プッシュ
+git add src-tauri/tauri.conf.json
+git commit -m "chore: bump version to 0.3.0"
+git push
+
+# 3. main にマージ
+# dev → main にマージすると自動的にリリースが実行される
+```
+
+**注意点:**
+- 同じバージョンで複数回リリースしない（タグ重複エラー）
+- リリース前に必ずバージョン番号を更新する
+- ビルド時間: 約10〜15分（GitHub Actions macOS ランナー）
+
+### PR 自動チェック
+
+**トリガー:** `main` または `dev` ブランチへの PR
+
+**チェック内容:**
+1. TypeScript 型チェック（`tsc --noEmit`）
+2. フロントエンドビルド（`npm run build`）
+3. Tauri ビルド（Universal Binary）
+
+**使い方:**
+```bash
+# PR を作成すると自動で実行される
+# エラーがあればマージ前に検出される
+```
+
 ## アーキテクチャ
 
 ### フロントエンド構造
